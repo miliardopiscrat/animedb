@@ -1,0 +1,64 @@
+
+CXXFLAGS += -c -g -Wall -Os -DTIXML_USE_STL -DSYS_UNIX=1
+CXXINCLUDES += -I./include/curl -I./include/tinyxml -I./include/external
+LDLIBS += -ltinyxml -lcurl -lz
+
+CPP_FILES += $(wildcard src/*.cpp) $(wildcard app/*.cpp)
+OBJ_FILES := $(addprefix obj/$(TARGET)/,$(notdir $(CPP_FILES:.cpp=.o)))
+
+MOCK_CPP_FILES += $(wildcard tests/mocks/*.cpp) $(wildcard src/*.cpp) $(wildcard tests/mocks/curl/*.cpp)
+MOCK_OBJ_FILES := $(addprefix obj/$(TARGET)/,$(notdir $(MOCK_CPP_FILES:.cpp=.o)))
+MOCKS_INCLUDE = -I./tests/mocks -I./tests/include/boost -I./tests/include/cute
+TEST_CPP_FILES = $(wildcard tests/src/*.cpp)
+TEST_OBJ_FILES := $(addprefix obj/$(TARGET)/,$(notdir $(TEST_CPP_FILES:.cpp=.o)))
+
+LIB_SUFFIX = _lib.a
+
+TARBALL_FILES = $(wildcard lib/*) $(wildcard src/*) $(wildcard include/*) "$(wildcard *.txt)" $(wildcard Makefile.*) Makefile
+
+all: $(BINARY_NAME)
+
+testlib: libtest.a
+
+obj/testlib/%.o: src/%.cpp
+			$(CXX) $(CXXFLAGS) -fprofile-arcs -ftest-coverage $(MOCKS_INCLUDE) src/$*.cpp -o $@
+
+obj/testlib/%.o: tests/mocks/%.cpp
+			$(CXX) $(CXXFLAGS) $(MOCKS_INCLUDE) tests/mocks/$*.cpp -o $@
+
+obj/testlib/%.o: tests/mocks/curl/%.cpp
+			$(CXX) $(CXXFLAGS) $(MOCKS_INCLUDE) tests/mocks/curl/$*.cpp -o $@
+
+obj/testlib/%.o: tests/src/%.cpp
+			$(CXX) $(CXXFLAGS) $(MOCKS_INCLUDE)  -I./src tests/src/$*.cpp -o $@
+
+
+$(BINARY_NAME): $(OBJ_FILES)
+		@echo 'Building target: $@'
+		$(CXX) $(LDFLAGS) -o $@ $(OBJ_FILES) $(LDLIBS)
+		$(STRIP) $(BINARY_NAME)
+		mv $(BINARY_NAME) ./binary
+		
+		
+libtest.a: $(MOCK_OBJ_FILES)
+		@echo 'Building target: $@'
+		ar rcs $@ $(MOCK_OBJ_FILES) 
+		mv $@ ./binary
+
+test: $(TEST_OBJ_FILES)
+		@echo 'Building target: $@'
+		$(CXX) $(LDFLAGS) -fprofile-arcs -ftest-coverage -static -o $@ $(TEST_OBJ_FILES) binary/libtest.a
+		$(STRIP)  $@
+		mv $@ ./binary
+
+tarball:
+		@lokaldir=`pwd`; lokaldir=$${lokaldir##*/};\
+		rm --force $$lokaldir.tar.gz; \
+		rm --force obj/$(TARGET)/*.o; \
+		tar --create \
+		--gzip \
+		--file $$lokaldir.tar.gz \
+		$(TARBALL_FILES) binary obj
+
+clean:
+		rm --force obj/$(TARGET)/*.o obj/testlib/* binary/$(BINARY_NAME) binary/*.a binary/test

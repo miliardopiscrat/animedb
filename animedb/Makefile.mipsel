@@ -1,0 +1,13 @@
+
+BINARY_NAME = animedb
+
+STRIP = mipsel-linux-strip
+CXX = mipsel-linux-g++
+LDFLAGS = -L./lib/mipsel
+
+CXXFLAGS =-mno-shared -EL -mabi=32 -mips32r2 -O3 -mtune=mips32r2  -mmt -mlong-calls
+
+obj/mipsel/%.o: src/%.cpp
+			$(CXX) $(CXXFLAGS) $(CXXINCLUDES) src/$*.cpp -o $@
+
+include Makefile.common
