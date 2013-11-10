@@ -5,9 +5,9 @@ $(info target variable not defined!! TARGET=linux/mipsel)
 else
 ARCH := $(TARGET)
 
-
-TARGET = testlib
-
+ifeq ($(MAKECMDGOALS),testlib)
+TARGET := testlib
+endif
 
 include Makefile.$(strip $(ARCH))
 

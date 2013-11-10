@@ -7,18 +7,18 @@ CPP_FILES += $(wildcard src/*.cpp) $(wildcard app/*.cpp)
 OBJ_FILES := $(addprefix obj/$(TARGET)/,$(notdir $(CPP_FILES:.cpp=.o)))
 
 MOCK_CPP_FILES += $(wildcard tests/mocks/*.cpp) $(wildcard src/*.cpp) $(wildcard tests/mocks/curl/*.cpp)
-MOCK_OBJ_FILES := $(addprefix obj/$(TARGET)/,$(notdir $(MOCK_CPP_FILES:.cpp=.o)))
+MOCK_OBJ_FILES := $(addprefix obj/testlib/,$(notdir $(MOCK_CPP_FILES:.cpp=.o)))
 MOCKS_INCLUDE = -I./tests/mocks -I./tests/include/boost -I./tests/include/cute
 TEST_CPP_FILES = $(wildcard tests/src/*.cpp)
-TEST_OBJ_FILES := $(addprefix obj/$(TARGET)/,$(notdir $(TEST_CPP_FILES:.cpp=.o)))
+TEST_OBJ_FILES := $(addprefix obj/testlib/,$(notdir $(TEST_CPP_FILES:.cpp=.o)))
 
 LIB_SUFFIX = _lib.a
 
-TARBALL_FILES = $(wildcard lib/*) $(wildcard src/*) $(wildcard include/*) "$(wildcard *.txt)" $(wildcard Makefile.*) Makefile
+TARBALL_FILES = $(wildcard app/*) $(wildcard lib/*) $(wildcard src/*) $(wildcard include/*) "$(wildcard *.txt)" $(wildcard Makefile.*) Makefile
 
 all: $(BINARY_NAME)
 
-testlib: libtest.a
+testlib: libtest.a test
 
 obj/testlib/%.o: src/%.cpp
 			$(CXX) $(CXXFLAGS) -fprofile-arcs -ftest-coverage $(MOCKS_INCLUDE) src/$*.cpp -o $@
@@ -48,7 +48,6 @@ libtest.a: $(MOCK_OBJ_FILES)
 test: $(TEST_OBJ_FILES)
 		@echo 'Building target: $@'
 		$(CXX) $(LDFLAGS) -fprofile-arcs -ftest-coverage -static -o $@ $(TEST_OBJ_FILES) binary/libtest.a
-		$(STRIP)  $@
 		mv $@ ./binary
 
 tarball:

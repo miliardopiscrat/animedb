@@ -9,5 +9,8 @@ CXXFLAGS =-mno-shared -EL -mabi=32 -mips32r2 -O3 -mtune=mips32r2  -mmt -mlong-ca
 
 obj/mipsel/%.o: src/%.cpp
 			$(CXX) $(CXXFLAGS) $(CXXINCLUDES) src/$*.cpp -o $@
+			
+obj/mipsel/%.o: app/%.cpp
+			$(CXX) $(CXXFLAGS) $(CXXINCLUDES) -I./src app/$*.cpp -o $@
 
 include Makefile.common

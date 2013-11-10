@@ -2,14 +2,7 @@
 
 BINARY_NAME = $(addsuffix $(TARGET),animedb_) 
 
-ifeq ($(TARGET),testlib)
-BINARY_NAME = $(addsuffix $(TARGET).a,animedb_) 
-endif
-
-STRIP = strip
 CXX = g++
-CC = gcc
-
 LDFLAGS = -L./lib/linux
 CXXFLAGS = -D_DEBUG
 STRIP = echo
