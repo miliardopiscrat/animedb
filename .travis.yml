@@ -2,7 +2,7 @@ language: cpp
 compiler:
   - gcc
 before_script:
-  - if [ "$CXX" = "g++" ]; then ls; fi
-script: (cd ./animedb && make TARGET=linux clean testlib)
+  - if [ "$CXX" = "g++" ]; then ./animedb/scripts/toolchain.sh; fi
+script: (./animedb/scripts/ci_run.sh)
 notifications:
   email: false
