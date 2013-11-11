@@ -54,6 +54,7 @@ tarball:
 		@lokaldir=`pwd`; lokaldir=$${lokaldir##*/};\
 		rm --force $$lokaldir.tar.gz; \
 		rm --force obj/$(TARGET)/*.o; \
+		cp ./../LICENSE ./; \
 		tar --create \
 		--gzip \
 		--file $$lokaldir.tar.gz \
