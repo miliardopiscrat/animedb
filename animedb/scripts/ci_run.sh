@@ -8,10 +8,10 @@ ls $(pwd)/../compiler
 
 cd animedb
 
-make TARGET=linux clean testlib
+make TARGET=linux testlib -j4
 
 ./binary/test
 
 make TARGET=linux clean
-make TARGET=mipsel clean all
+make TARGET=mipsel all -j4
 make TARGET=mipsel tarball

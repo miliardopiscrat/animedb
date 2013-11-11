@@ -14,7 +14,7 @@ TEST_OBJ_FILES := $(addprefix obj/testlib/,$(notdir $(TEST_CPP_FILES:.cpp=.o)))
 
 LIB_SUFFIX = _lib.a
 
-TARBALL_FILES = $(wildcard app/*) $(wildcard lib/*) $(wildcard src/*) $(wildcard include/*) "$(wildcard *.txt)" $(wildcard Makefile.*) Makefile
+TARBALL_FILES = $(wildcard app/*) $(wildcard lib/*) $(wildcard src/*) $(wildcard include/*) "$(wildcard *.txt)" $(wildcard Makefile.*) Makefile LICENSE
 
 all: $(BINARY_NAME)
 
