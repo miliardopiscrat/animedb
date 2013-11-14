@@ -16,7 +16,10 @@
 #include "ArgumentsParser.hpp"
 #include "common.hpp"
 #include "SearchParser.hpp"
+
+
 #include "AnimeArtFinder.hpp"
+#include "DanbooruArtFinder.hpp"
 
 #include "Debug.hpp"
 
@@ -73,7 +76,8 @@ bool parser_search_api_file(std::stringbuf& infoSearchResult, const std::string&
 
 	if(!titles.empty())
 	{
-		AnimeArtFinder finder(titles);
+		ART_FINDER_2(AnimePicFinder, DanbooruArtFinder) finder(titles);
+		//ART_FINDER_1(AnimePicFinder) finder(titles);
 		finder.getAnimeArts(result.fanart);
 	}
 

@@ -1,53 +1,42 @@
 /*
- * AnimeArtFinder.cpp
+ * AnimePicFinder.cpp
  *
- *  Created on: 20-10-2013
+ *  Created on: 14 lis 2013
  *      Author: miliardopiscrat
  */
 
-#include <algorithm>
-#include <sstream>
-#include <curl/curl.h>
+#include "AnimePicFinder.hpp"
 #include <tinyxml.h>
-#include "AnimeArtFinder.hpp"
 #include "Debug.hpp"
 
 const std::string query_url = "http://anime-pictures.net/pictures/view_posts/0?lang=en&type=xml&search_tag=";
 
 
-AnimeArtFinder::AnimeArtFinder(const std::vector<std::string>& keywords) {
-
-	titles = keywords; // local copy
-	std::sort(titles.begin(), titles.end());
-	titles.erase(std::unique( titles.begin(), titles.end()), titles.end());
-}
-
-AnimeArtFinder::~AnimeArtFinder() {
-
+AnimePicFinder::AnimePicFinder() {
 
 }
 
-void AnimeArtFinder::getAnimeArts(std::vector<Fanart>& arts) {
+AnimePicFinder::~AnimePicFinder() {
 
-	std::stringbuf buff;
+}
 
-	for (std::vector<std::string>::const_iterator it = titles.begin(); it != titles.end(); ++it) {
+bool AnimePicFinder::getAnimeArts(std::vector<Fanart>& arts, const std::string& tag) {
 
-		buff.str("");
-		const std::string& title = *it;
-		std::string keyword(curl_escape(title.c_str(), title.length()));
-		std::ostream out(&buff);
+	buff.str("");
+	std::string keyword(curl_escape(tag.c_str(), tag.length()));
+	std::ostream out(&buff);
 
-		if (httpSocket.readContent(query_url + keyword, 80, out)) {
-			std::istream in(&buff);
-			if (getArtLinks(in, arts)) {
-				break; // optimize for time
-			}
+	if (httpSocket.readContent(query_url + keyword, 80, out)) {
+		std::istream in(&buff);
+		if (getArtLinks(in, arts)) {
+			return true; // optimize for time
 		}
 	}
+
+	return false;
 }
 
-bool AnimeArtFinder::parseArtLinks(const TiXmlHandle& xmlHandle, std::vector<Fanart>& arts) {
+bool AnimePicFinder::parseArtLinks(const TiXmlHandle& xmlHandle, std::vector<Fanart>& arts) {
 
 	TiXmlElement * posts = xmlHandle.FirstChildElement("posts").ToElement();
 
@@ -56,6 +45,7 @@ bool AnimeArtFinder::parseArtLinks(const TiXmlHandle& xmlHandle, std::vector<Fan
 		TiXmlElement * post = posts->FirstChildElement("post");
 		if (post) {
 
+			Fanart fanart;
 			do {
 
 				//int size;
@@ -68,13 +58,11 @@ bool AnimeArtFinder::parseArtLinks(const TiXmlHandle& xmlHandle, std::vector<Fan
 							post->QueryStringAttribute("file_url", &art_url) == TIXML_SUCCESS
 							)
 					{
-
-						Fanart fanart;
 						fanart.setFanartPreview(preview_url);
 						fanart.setFanart(art_url);
-
-						TRACE(fanart)
 						arts.push_back(fanart);
+
+						TRACE(fanart);
 					}
 				}
 
@@ -87,7 +75,7 @@ bool AnimeArtFinder::parseArtLinks(const TiXmlHandle& xmlHandle, std::vector<Fan
 	return false;
 }
 
-bool AnimeArtFinder::getArtLinks(std::istream& in, std::vector<Fanart>& arts) {
+bool AnimePicFinder::getArtLinks(std::istream& in, std::vector<Fanart>& arts) {
 
 	TiXmlDocument doc;
 	in >> doc;

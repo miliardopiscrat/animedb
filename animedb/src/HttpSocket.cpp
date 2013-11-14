@@ -16,14 +16,14 @@
 
 
 
-HttpGetter::HttpGetter(unsigned int timeout) :_timeout(timeout) {
+HttpGetter::HttpGetter(unsigned int timeout) :_timeout(timeout), curl((curl_easy_init())) {
 
 }
 
 
 HttpGetter::~HttpGetter()
 {
-
+	curl_easy_cleanup(curl);
 }
 
 
@@ -31,14 +31,11 @@ HttpGetter::~HttpGetter()
 bool HttpGetter::readContent(const std::string& url, unsigned int port, std::ostream& ostream) const {
 
 	CURLcode code(CURLE_FAILED_INIT);
-	CURL* const curl = curl_easy_init();
 
 	if(curl && readDocumentSetup(url, port, curl, ostream))
 	{
 		code = curl_easy_perform(curl);
 	}
-
-	curl_easy_cleanup(curl);
 
 	return code == CURLE_OK;
 }

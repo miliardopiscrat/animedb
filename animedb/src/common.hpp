@@ -14,7 +14,7 @@
 #define MAX_SEARCH_RESULT 4
 #define JB_SCPR_MAX_GENRE	4
 #define JB_SCPR_MAX_ACTOR	4
-#define JB_SCPR_MAX_IMAGE	1
+#define JB_SCPR_MAX_IMAGE	16
 
 struct Element {
 	int power;

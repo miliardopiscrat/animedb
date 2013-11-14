@@ -28,11 +28,12 @@ private:
 
 	static size_t data_write(void* buf, size_t size, size_t nmemb, void* userp);
 
+	HttpGetter(const HttpGetter&); // no implementation
+	HttpGetter operator=(const HttpGetter &); // no implementation
 
 	const unsigned int _timeout;
 
-	HttpGetter(const HttpGetter&); // no implementation
-	HttpGetter operator=(const HttpGetter &); // no implementation
+	CURL* const curl;
 };
 
 
