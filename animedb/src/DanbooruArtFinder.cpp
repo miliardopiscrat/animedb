@@ -55,16 +55,29 @@ bool DanbooruArtFinder::parseArtLinks(const TiXmlHandle& xmlHandle, std::vector<
 			do {
 				TiXmlNode* urlNode = post->FirstChild("file-url");
 
-				if(urlNode)
+				TiXmlNode* preview_urlNode = post->FirstChild("preview-file-url");
+
+				TiXmlNode* extNode = post->FirstChild("file-ext");
+
+				TiXmlNode* fileSizeNode = post->FirstChild("file-size");
+
+				if(urlNode && preview_urlNode && extNode && ( std::string("jpg") == extNode->FirstChild()->ToText()->Value()  || std::string("png") == extNode->FirstChild()->ToText()->Value()))
 				{
 
-					const std::string pic_url = domain_url + urlNode->FirstChild()->ToText()->Value();
-					fanart.setFanart(pic_url);
-					fanart.setFanartPreview(pic_url);
+					std::stringstream id(fileSizeNode->FirstChild()->ToText()->Value());
+					unsigned int size = 0;
+					id >> std::dec >> size;
 
-					arts.push_back(fanart);
+					if (size < 1400000) {
+						const std::string pic_url = domain_url + urlNode->FirstChild()->ToText()->Value();
+						//const std::string preview_url = domain_url + preview_urlNode->FirstChild()->ToText()->Value();
+						fanart.setFanart(pic_url);
+						fanart.setFanartPreview(pic_url);
 
-					TRACE(fanart);
+						arts.push_back(fanart);
+
+						TRACE(fanart);
+					}
 				}
 
 			} while ((post = post->NextSiblingElement("post")) && arts.size() < JB_SCPR_MAX_IMAGE);

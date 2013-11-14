@@ -7,6 +7,7 @@
 
 #include "AnimePicFinder.hpp"
 #include <tinyxml.h>
+#include <algorithm>
 #include "Debug.hpp"
 
 const std::string query_url = "http://anime-pictures.net/pictures/view_posts/0?lang=en&type=xml&search_tag=";
@@ -48,8 +49,8 @@ bool AnimePicFinder::parseArtLinks(const TiXmlHandle& xmlHandle, std::vector<Fan
 			Fanart fanart;
 			do {
 
-				//int size;
-				//if (post->QueryValueAttribute("file_size", &size) == TIXML_SUCCESS)
+				unsigned int size = 0;
+				if (post->QueryValueAttribute("file_size", &size) == TIXML_SUCCESS && size < 1800000)
 				{
 					std::string preview_url;
 					std::string art_url;
@@ -58,6 +59,15 @@ bool AnimePicFinder::parseArtLinks(const TiXmlHandle& xmlHandle, std::vector<Fan
 							post->QueryStringAttribute("file_url", &art_url) == TIXML_SUCCESS
 							)
 					{
+
+						preview_url.erase(std::remove(preview_url.begin(), preview_url.end(), '\n'), preview_url.end());
+						preview_url.erase(std::remove(preview_url.begin(), preview_url.end(), '\t'), preview_url.end());
+						preview_url.erase(std::remove(preview_url.begin(), preview_url.end(), '\r'), preview_url.end());
+
+						art_url.erase(std::remove(art_url.begin(), art_url.end(), '\n'), art_url.end());
+						art_url.erase(std::remove(art_url.begin(), art_url.end(), '\t'), art_url.end());
+						art_url.erase(std::remove(art_url.begin(), art_url.end(), '\r'), art_url.end());
+
 						fanart.setFanartPreview(preview_url);
 						fanart.setFanart(art_url);
 						arts.push_back(fanart);

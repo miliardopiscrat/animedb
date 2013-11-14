@@ -82,7 +82,7 @@ bool parser_search_api_file(std::stringbuf& infoSearchResult, const std::string&
 	}
 
 	std::ofstream outFile;
-	outFile.open(outputFile.c_str(), std::ios::out);
+	outFile.open(outputFile.c_str(), std::ios::out | std::ios::binary);
 	bool infoResultGenerated = false;
 
 	if ((infoResultGenerated = outFile.good())) {
