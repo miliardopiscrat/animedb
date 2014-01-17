@@ -10,10 +10,14 @@
 
 
 #include <sys/stat.h>
-#include <sys/sendfile.h>
+
 #include <sys/types.h>
 #include <fcntl.h>
 #include <unistd.h>
+
+#ifdef __linux__
+#include <sys/sendfile.h>
+#endif
 
 
 #endif /* SYSTEMOPS_HPP_ */

@@ -1,0 +1,18 @@
+
+
+BINARY_NAME = $(addsuffix $(TARGET),animedb_) 
+
+CXX = g++
+LDFLAGS = -L./lib/cyg
+CXXFLAGS = -D_DEBUG
+STRIP = echo
+LDLIBS =  -lidn -ldl -lssl 
+
+obj/cyg/%.o: src/%.cpp
+			$(CXX) $(CXXFLAGS) $(CXXINCLUDES) src/$*.cpp -o $@
+
+obj/cyg/%.o: app/%.cpp
+			$(CXX) $(CXXFLAGS) $(CXXINCLUDES) -I./src app/$*.cpp -o $@
+
+
+include Makefile.common

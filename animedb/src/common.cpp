@@ -28,6 +28,7 @@ std::vector<std::string> split(const char *str, char c) {
 	return result;
 }
 
+#ifdef __linux__
 bool copy_file(const std::string& source, const std::string& destination) {
 
 	static struct stat stat_source;
@@ -43,6 +44,28 @@ bool copy_file(const std::string& source, const std::string& destination) {
 	close(fdSource);
 	return result;
 }
+#else
+
+bool copy_file(const std::string& source, const std::string& destination)
+{
+    char            buffer[BUFSIZ];
+    size_t          n;
+    FILE *f1, *f2;
+
+
+    if(!(f1 = fopen(source.c_str(), "rb")) || !(f2 = fopen(source.c_str(), "wb")))
+    {
+    	return false;
+    }
+
+    while ((n = fread(buffer, sizeof(char), sizeof(buffer), f1)) > 0)
+    {
+        if (fwrite(buffer, sizeof(char), n, f2) != n)
+            return false;
+    }
+    return true;
+}
+#endif
 
 bool file_exists(const std::string& name) {
 	static struct stat buffer;
