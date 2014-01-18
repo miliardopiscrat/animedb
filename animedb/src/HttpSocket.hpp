@@ -19,7 +19,7 @@ public:
 
 
 	bool readContent(const std::string& url, unsigned int port, std::ostream& ostream) const;
-
+	bool readPostContent(const std::string& url, const std::string postParams, unsigned int port, std::ostream& ostream) const;
 
 private:
 

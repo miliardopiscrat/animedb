@@ -40,6 +40,20 @@ bool HttpGetter::readContent(const std::string& url, unsigned int port, std::ost
 	return code == CURLE_OK;
 }
 
+bool HttpGetter::readPostContent(const std::string& url, const std::string postParams, unsigned int port, std::ostream& ostream) const {
+
+	CURLcode code(CURLE_FAILED_INIT);
+
+	if(curl && CURLE_OK == curl_easy_setopt(curl, CURLOPT_POST, 1L) &&
+			CURLE_OK == curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postParams.c_str()) &&
+			readDocumentSetup(url, port, curl, ostream))
+	{
+		code = curl_easy_perform(curl);
+	}
+
+	return code == CURLE_OK;
+}
+
 bool HttpGetter::readDocumentSetup(const std::string& url, unsigned int port,  CURL* const curl, std::ostream& ostream) const {
 
 		return CURLE_OK == curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &data_write)

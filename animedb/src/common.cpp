@@ -7,6 +7,7 @@
 
 #include "common.hpp"
 #include <fstream>
+#include <iostream>
 
 #include <systemops.hpp>
 
@@ -48,21 +49,14 @@ bool copy_file(const std::string& source, const std::string& destination) {
 
 bool copy_file(const std::string& source, const std::string& destination)
 {
-    char            buffer[BUFSIZ];
-    size_t          n;
-    FILE *f1, *f2;
+	std::ifstream fsource(source.c_str(), std::ios::binary);
+	std::ofstream fdest(destination.c_str(), std::ios::binary);
 
+	fdest << fsource.rdbuf();
 
-    if(!(f1 = fopen(source.c_str(), "rb")) || !(f2 = fopen(source.c_str(), "wb")))
-    {
-    	return false;
-    }
+	fsource.close();
+	fdest.close();
 
-    while ((n = fread(buffer, sizeof(char), sizeof(buffer), f1)) > 0)
-    {
-        if (fwrite(buffer, sizeof(char), n, f2) != n)
-            return false;
-    }
     return true;
 }
 #endif

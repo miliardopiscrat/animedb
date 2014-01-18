@@ -20,6 +20,7 @@
 
 #include "AnimeArtFinder.hpp"
 #include "DanbooruArtFinder.hpp"
+#include "OnAnimeFinder.hpp"
 
 #include "Debug.hpp"
 
@@ -76,7 +77,7 @@ bool parser_search_api_file(std::stringbuf& infoSearchResult, const std::string&
 
 	if(!titles.empty())
 	{
-		ART_FINDER_2(AnimePicFinder, DanbooruArtFinder) finder(titles);
+		ART_FINDER_1(OnAnimeFinder) finder(titles);
 		//ART_FINDER_1(AnimePicFinder) finder(titles);
 		finder.getAnimeArts(result.fanart);
 	}
@@ -121,6 +122,7 @@ bool get_Elements_from_db(const std::string& keyword, std::vector<Element>& elem
 bool generate_search_result(const char* fileName, const std::vector<Element>& elementsInDb)
 {
 	std::ofstream outFile;
+	TRACE(fileName);
 	outFile.open(fileName, std::ios::out | std::ios::binary);
 
 	if (!outFile.good()) {
