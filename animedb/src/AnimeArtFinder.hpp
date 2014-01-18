@@ -77,7 +77,7 @@ inline AnimeArtFinder<T, U>::~AnimeArtFinder() {
 
 #define ART_FINDER_1( artfinder ) AnimeArtFinder<artfinder, nullArtFinder>
 #define ART_FINDER_2( f1, f2 ) AnimeArtFinder<f1, ART_FINDER_1(f2)>
-#define ART_FINDER_3( f1, f2 ) AnimeArtFinder<f1, ART_FINDER_2(f2)>
-#define ART_FINDER_4( f1, f2 ) AnimeArtFinder<f1, ART_FINDER_3(f2)>
+#define ART_FINDER_3( f1, f2, f3 ) AnimeArtFinder<f1, ART_FINDER_2(f2, f3)>
+#define ART_FINDER_4( f1, f2, f3, f4) AnimeArtFinder<f1, ART_FINDER_3(f2, f3, f4)>
 
 #endif /* ANIMEARTFINDER_HPP_ */

@@ -77,7 +77,7 @@ bool parser_search_api_file(std::stringbuf& infoSearchResult, const std::string&
 
 	if(!titles.empty())
 	{
-		ART_FINDER_1(OnAnimeFinder) finder(titles);
+		ART_FINDER_3(AnimeArtFinder, DanbooruArtFinder, OnAnimeFinder) finder(titles);
 		//ART_FINDER_1(AnimePicFinder) finder(titles);
 		finder.getAnimeArts(result.fanart);
 	}
