@@ -29,11 +29,8 @@ bool AnimePicFinder::getAnimeArts(std::vector<Fanart>& arts, const std::string& 
 
 	if (httpSocket.readContent(query_url + keyword, 80, out)) {
 		std::istream in(&buff);
-		if (getArtLinks(in, arts)) {
-			return true; // optimize for time
-		}
+		return getArtLinks(in, arts);
 	}
-
 	return false;
 }
 

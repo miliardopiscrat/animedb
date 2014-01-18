@@ -14,7 +14,7 @@
 class HttpGetter {
 
 public:
-	HttpGetter(unsigned int timeout = 10);
+	HttpGetter(unsigned int timeout = 60);
 	~HttpGetter();
 
 

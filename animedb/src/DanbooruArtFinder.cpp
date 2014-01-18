@@ -33,9 +33,8 @@ bool DanbooruArtFinder::getAnimeArts(std::vector<Fanart>& arts, const std::strin
 
 	if (httpSocket.readContent(query_url + keyword, 80, out)) {
 		std::istream in(&buff);
-		if (getArtLinks(in, arts)) {
-			return true; // optimize for time
-		}
+		return getArtLinks(in, arts);
+
 	}
 
 	return false;

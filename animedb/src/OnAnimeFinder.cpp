@@ -15,9 +15,9 @@ static const std::string source_url = "http://on-anime.pl";
 
 static const std::string start_result = "href=\"";
 
-static const std::string galery_suffix = "/galeria";
+static const std::string galery_suffix = "/grafika/";
 
-static const std::string pic_position = "img src=\"";
+static const std::string pic_position = "img obraz=\"";
 
 OnAnimeFinder::OnAnimeFinder() {
 
@@ -31,7 +31,8 @@ bool OnAnimeFinder::getAnimeArts(std::vector<Fanart>& arts, const std::string& t
 
 	buff.str("");
 	std::string keyword(tag.begin(), tag.end());
-	std::replace(keyword.begin(), keyword.end(), ' ', '+');
+	std::transform(keyword.begin(), keyword.end(), keyword.begin(), ::tolower);
+	//std::replace(keyword.begin(), keyword.end(), ' ', '-');
 
 	TRACE(keyword);
 	std::ostream out(&buff);
@@ -40,31 +41,31 @@ bool OnAnimeFinder::getAnimeArts(std::vector<Fanart>& arts, const std::string& t
 		std::istream in(&buff);
 		TRACE(buff.str());
 
-		if (getArtLinks(in, arts)) {
-			return true; // optimize for time
-		}
+		return getArtLinks(keyword, in, arts);
+
 	}
 
 	return false;
 }
 
-bool OnAnimeFinder::parseContent(const std::string animeLink, std::istream& in, std::vector<Fanart>& arts) {
+bool OnAnimeFinder::parseContent(std::istream& in, std::vector<Fanart>& arts) {
 
-	std::string galery_key = animeLink + galery_suffix;
+	std::string galery_key = source_url + galery_suffix;
 	std::string line;
 	Fanart fanart;
 
-	const std::string second_pic_condition = start_result + "/anime/";
+	const std::string second_pic_condition = "/grafika/";
 
 	while (getline(in, line) && arts.size() < JB_SCPR_MAX_IMAGE) {
 
 		std::string::size_type start_index = line.find(pic_position);
+
 		if(start_index != std::string::npos && line.find(second_pic_condition) != std::string::npos) {
 
 			start_index = start_index + pic_position.length();
 			std::string::size_type end_index = line.find("\"", start_index);
 
-			std::string art_name = source_url + line.substr(start_index, end_index - start_index);
+			std::string art_name = galery_key + line.substr(start_index, end_index - start_index);
 
 			fanart.setFanart(art_name);
 			fanart.setFanartPreview(art_name);
@@ -76,7 +77,7 @@ bool OnAnimeFinder::parseContent(const std::string animeLink, std::istream& in, 
 	return arts.size() == JB_SCPR_MAX_IMAGE;
 }
 
-bool OnAnimeFinder::getArtLinks(std::istream& in, std::vector<Fanart>& arts) {
+bool OnAnimeFinder::getArtLinks(const std::string keyword, std::istream& in, std::vector<Fanart>& arts) {
 
 	Fanart fanart;
 	std::string line;
@@ -89,7 +90,11 @@ bool OnAnimeFinder::getArtLinks(std::istream& in, std::vector<Fanart>& arts) {
 		std::string::size_type index = std::string::npos;
 		if ((index = line.find(start_result)) != std::string::npos) {
 			result_text = line;
+			std::transform(result_text.begin(), result_text.end(), result_text.begin(), ::tolower);
 			start_index = index + start_result.length();
+			if (result_text.find(keyword) != std::string::npos) {
+				break;
+			}
 		}
 	}
 
@@ -105,7 +110,7 @@ bool OnAnimeFinder::getArtLinks(std::istream& in, std::vector<Fanart>& arts) {
 		if (httpSocket.readContent(source_url + anime_link, 80, out)) {
 
 			std::istream in(&buff);
-			return parseContent(anime_link, in, arts);
+			return parseContent(in, arts);
 		}
 	}
 	return false;

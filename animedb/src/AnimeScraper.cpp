@@ -61,7 +61,7 @@ bool download_searchFile(const std::string& searchId, std::stringbuf& infoSearch
 
 bool parser_search_api_file(std::stringbuf& infoSearchResult, const std::string& outputFile) {
 
-
+	TRACE(infoSearchResult.str());
 	std::istream in(&infoSearchResult);
 	InfoResult result = { };
 	SearchParser parser;
@@ -77,8 +77,8 @@ bool parser_search_api_file(std::stringbuf& infoSearchResult, const std::string&
 
 	if(!titles.empty())
 	{
-		ART_FINDER_3(AnimePicFinder, DanbooruArtFinder, OnAnimeFinder) finder(titles);
-		//ART_FINDER_1(AnimePicFinder) finder(titles);
+		ART_FINDER_3(OnAnimeFinder, AnimePicFinder, DanbooruArtFinder) finder(titles);
+		//ART_FINDER_1(OnAnimeFinder) finder(titles);
 		finder.getAnimeArts(result.fanart);
 	}
 
