@@ -16,10 +16,3 @@ make TARGET=linux clean
 make TARGET=mipsel all -j4
 make TARGET=mipsel tarball
 
-
-/animedb/scripts/toolchain.sh
-
-./animedb/scripts/ci_run.sh
-
-cd animedb
-mv animedb.tar.gz animedb-`echo $DRONE_BUILD_NUMBER`.tar.gz
