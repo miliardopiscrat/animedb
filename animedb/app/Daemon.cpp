@@ -17,44 +17,31 @@
 extern TraceType currentTrace;
 #endif
 
-#define APPLICATION_INSTANCE_MUTEX_NAME "/tmp/animeDb_sem"
+#define APPLICATION_INSTANCE_MUTEX_NAME "/tmp/animeDb_sem_on"
 
 int SingleInstance::semid = -1;
 
 __attribute__((constructor)) void on_start() {
 
 	__builtin_puts("constructor");
-	key_t key = ftok(APPLICATION_INSTANCE_MUTEX_NAME, 'J');
-
-	if (key != -1) {
-
-		SingleInstance::semid = semget(key, 1, IPC_CREAT | IPC_EXCL);
-	}
+	DaemonContainer::attachSem();
 	//SingleInstance::__sem_instance = sem_open(APPLICATION_INSTANCE_MUTEX_NAME, O_CREAT | O_EXCL);
 }
 
 __attribute__((destructor)) void on_exit() {
 
 	__builtin_puts("destructor");
-	if (SingleInstance::isFirstRunning()) {
-
-		semctl(SingleInstance::semid, 0, IPC_RMID);
-		SingleInstance::semid = -1;
-	}
+	DaemonContainer::detachSem();
 }
 
 DaemonContainer::DaemonContainer():sid(0) {
 
+	DaemonContainer::detachSem();
 	pid = fork();
 }
 
 DaemonContainer::~DaemonContainer() {
 
-	if (isParentProcess())
-	{
-		semctl(SingleInstance::semid, 0, IPC_RMID);
-		SingleInstance::semid = -1;
-	}
 }
 
 bool DaemonContainer::initDaemon() {
@@ -71,9 +58,7 @@ bool DaemonContainer::initDaemon() {
 #if defined _DEBUG
 			currentTrace = DAEMON;
 #endif
-			on_exit();
 			on_start();
-
 			return true;
 		}
 	}
@@ -83,6 +68,25 @@ bool DaemonContainer::initDaemon() {
 bool DaemonContainer::isParentProcess() {
 
 	 return pid > 0;
+}
+
+void DaemonContainer::detachSem()
+{
+	if (SingleInstance::isFirstRunning()) {
+
+		semctl(SingleInstance::semid, 0, IPC_RMID);
+		SingleInstance::semid = -1;
+	}
+}
+
+void DaemonContainer::attachSem()
+{
+	key_t key = ftok(APPLICATION_INSTANCE_MUTEX_NAME, 'J');
+
+	if (key != -1 && SingleInstance::semid == -1) {
+
+		SingleInstance::semid = semget(key, 1, IPC_CREAT | IPC_EXCL);
+	}
 }
 
 void DaemonContainer::startLoop(bool(*runMethod)(void)) {

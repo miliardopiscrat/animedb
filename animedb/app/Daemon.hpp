@@ -22,8 +22,6 @@ public:
 
 private:
 
-	friend void on_start();
-	friend void on_exit();
 	friend class DaemonContainer;
 
     static int semid;
@@ -38,6 +36,9 @@ public:
 	bool initDaemon();
 
 	bool isParentProcess();
+
+	static void detachSem();
+	static void attachSem();
 
 	void startLoop(bool(*runMethod)(void));
 
