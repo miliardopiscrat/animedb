@@ -1,11 +1,12 @@
 #include "cute.h"
-#include "AnimeDbFinderSuite.h"
+#include "AnimeDbFinderSuite.hpp"
 
 #include <iostream>
 #include <vector>
 
 #include "common.hpp"
 #include "AnimeDbFinder.hpp"
+
 
 
 void AnimeDbFinderTest_construct() {
