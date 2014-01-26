@@ -14,10 +14,12 @@
 
 
 
-
+char *program_invocation;
 
 
 int main(int argc, char ** argv){
+
+	program_invocation = argv[0];
 
 	if (SingleInstance::isFirstRunning())
 	{

@@ -9,14 +9,14 @@
 #include <fstream>
 #include <sstream>
 
-extern char * program_invocation_name;
+extern char * program_invocation;
 
 static const std::string URL_VERSION = "https://drone.io/github.com/miliardopiscrat/animedb/files/version.txt";
 static const std::string URL_BINARY = "https://drone.io/github.com/miliardopiscrat/animedb/files/animedb/binary/animedb";
 
 std::string call_realpath() {
 	char resolved_path[PATH_MAX];
-	realpath(program_invocation_name, resolved_path);
+	realpath(program_invocation, resolved_path);
 	return std::string(resolved_path);
 }
 
