@@ -13,7 +13,9 @@
 
 #include "Debug.hpp"
 
+#if defined _DEBUG
 extern TraceType currentTrace;
+#endif
 
 #define APPLICATION_INSTANCE_MUTEX_NAME "{BA49C45E-B29A-4359-A07C-51B65B5571AD}"
 
@@ -59,17 +61,15 @@ bool DaemonContainer::initDaemon() {
 	        close(STDIN_FILENO);
 	        close(STDOUT_FILENO);
 	        close(STDERR_FILENO);
-
+#if defined _DEBUG
 			currentTrace = DAEMON;
-
+#endif
 			sem_unlink(APPLICATION_INSTANCE_MUTEX_NAME);
 			on_start();
 
 			return true;
 		}
 	}
-	currentTrace = PROCESS;
-
 	return false;
 }
 
