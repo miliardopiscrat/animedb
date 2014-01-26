@@ -3,6 +3,7 @@
 #include "Debug.hpp"
 #include "HttpSocket.hpp"
 
+
 #include <sys/param.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -38,7 +39,13 @@ int BuildVerison::updateToCurrent() const {
 
 	if (getter.readContent(URL_VERSION, 80, oVersionStr)) {
 		std::istream iVersionStr(&vBuf);
+
+		TRACE("DOWNLOADING NEW VERSION FILE!")
 		iVersionStr >> version;
+	}
+	else
+	{
+		TRACE("FAILED TO DOWNLAOD NEW VERSION FILE!")
 	}
 
 	return version == 0 ? VERSION_INFO : version;
@@ -47,9 +54,9 @@ int BuildVerison::updateToCurrent() const {
 bool update() {
 
 	TRACE("main_daemon start!! " << VERSION_INFO)
-	usleep(10000000);
+	usleep(40000000);
 
-	BuildVerison version;
+	const BuildVerison version;
 
 	TRACE("version build is: " << version.getVersion())
 
@@ -58,7 +65,12 @@ bool update() {
 
 		HttpGetter getter;
 		std::ofstream outFile;
-		outFile.open(call_realpath().c_str(), std::ios::out | std::ios::binary);
+
+		std::string target_file = call_realpath();
+
+		unlink(target_file.c_str());
+
+		outFile.open(target_file.c_str(), std::ios::out | std::ios::binary);
 
 		if(!outFile.good())
 		{
