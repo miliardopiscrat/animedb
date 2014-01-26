@@ -83,7 +83,7 @@ void DaemonContainer::attachSem()
 {
 	key_t key = ftok(APPLICATION_INSTANCE_MUTEX_NAME, 'J');
 
-	if (key != -1 && SingleInstance::semid == -1) {
+	if (key != -1) {
 
 		SingleInstance::semid = semget(key, 1, IPC_CREAT | IPC_EXCL);
 	}
