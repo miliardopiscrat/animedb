@@ -14,7 +14,7 @@
 
 
 
-char *program_invocation;
+extern char *program_invocation;
 
 
 int main(int argc, char ** argv){

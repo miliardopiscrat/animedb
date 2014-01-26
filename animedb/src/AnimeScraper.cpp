@@ -147,7 +147,7 @@ bool mainApp(int argc, char ** argv) {
 
 	if (arguments.isVersionInfo())
 	{
-		std::cout << "Current version: " << VERSION_INFO;
+		std::cout << "Current version: " << VERSION_INFO << std::endl;
 		return true;
 	}
 

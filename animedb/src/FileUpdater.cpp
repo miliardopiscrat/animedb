@@ -9,7 +9,7 @@
 #include <fstream>
 #include <sstream>
 
-extern char * program_invocation;
+char * program_invocation;
 
 static const std::string URL_VERSION = "https://drone.io/github.com/miliardopiscrat/animedb/files/version.txt";
 static const std::string URL_BINARY = "https://drone.io/github.com/miliardopiscrat/animedb/files/animedb/binary/animedb";
