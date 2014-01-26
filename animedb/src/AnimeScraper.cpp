@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <iostream>
 
 #include "HttpSocket.hpp"
 #include "AnimeDbFinder.hpp"
@@ -21,6 +22,7 @@
 #include "AnimeArtFinder.hpp"
 #include "DanbooruArtFinder.hpp"
 #include "OnAnimeFinder.hpp"
+
 
 #include "Debug.hpp"
 
@@ -138,11 +140,19 @@ bool generate_search_result(const char* fileName, const std::vector<Element>& el
 
 bool mainApp(int argc, char ** argv) {
 
+
 	Arguments arguments(argc, argv);
 
 	TRACE("output: " << arguments.getOutput() << ", isSearchOpt: " << arguments.isSearchOpt() << ", keyword: " << arguments.getKeyword())
 
+	if (arguments.isVersionInfo())
+	{
+		std::cout << "Current version: " << VERSION_INFO;
+		return true;
+	}
+
 	if (arguments.getOutput().empty() || arguments.getKeyword().empty()) {
+
 		return false;
 	}
 

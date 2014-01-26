@@ -17,7 +17,7 @@ public:
 	ArgumentsParsers(int argc, char ** argv);
 
 	void parse(std::string &language, std::string &output, std::string &keyword,
-			bool &searchOpt);
+			bool &searchOpt, bool &versionInfo);
 
 private:
 	int _argc;
@@ -35,6 +35,8 @@ public:
 
 	bool isSearchOpt() const;
 
+	bool isVersionInfo() const;
+
 	const std::string& getLanguage() const;
 
 	const std::string& getKeyword() const;
@@ -43,6 +45,7 @@ public:
 
 private:
 	bool searchOpt;
+	bool versionInfo;
 	std::string language;
 	std::string keyword;
 	std::string output;
