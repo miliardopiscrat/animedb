@@ -17,7 +17,7 @@
 extern TraceType currentTrace;
 #endif
 
-#define APPLICATION_INSTANCE_MUTEX_NAME "{BA49C45E-B29A-4359-A07C-51B65B5571AD}"
+#define APPLICATION_INSTANCE_MUTEX_NAME "{BA49C45E-BBB-435A-AA56-51B65B5571AD}"
 
 sem_t * SingleInstance::__sem_instance = NULL;
 
