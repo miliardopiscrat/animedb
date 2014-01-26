@@ -17,7 +17,7 @@ public:
 
 	static bool isFirstRunning() {
 
-		return __sem_instance != NULL;
+		return semid >= 0;
 	}
 
 private:
@@ -26,7 +26,7 @@ private:
 	friend void on_exit();
 	friend class DaemonContainer;
 
-	static sem_t *__sem_instance;
+    static int semid;
 };
 
 class DaemonContainer

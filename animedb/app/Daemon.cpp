@@ -1,37 +1,44 @@
 #include "Daemon.hpp"
 
 
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
 #include <fcntl.h>           /* For O_* constants */
 #include <sys/stat.h>        /* For mode constants */
-#include <sys/types.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <unistd.h>
 #include <syslog.h>
-#include <string.h>
-
 #include "Debug.hpp"
 
 #if defined _DEBUG
 extern TraceType currentTrace;
 #endif
 
-#define APPLICATION_INSTANCE_MUTEX_NAME "{BA49C45E-BBB-435A-AA56-51B65B5571AD}"
+#define APPLICATION_INSTANCE_MUTEX_NAME "/tmp/animeDb_sem"
 
-sem_t * SingleInstance::__sem_instance = NULL;
+int SingleInstance::semid = 0;
 
 __attribute__((constructor)) void on_start() {
 
-	SingleInstance::__sem_instance = sem_open(APPLICATION_INSTANCE_MUTEX_NAME, O_CREAT | O_EXCL);
+	__builtin_puts("constructor");
+	key_t key = ftok(APPLICATION_INSTANCE_MUTEX_NAME, 'J');
+
+	if (key != -1) {
+
+		SingleInstance::semid = semget(key, 1, IPC_CREAT | IPC_EXCL);
+	}
+	//SingleInstance::__sem_instance = sem_open(APPLICATION_INSTANCE_MUTEX_NAME, O_CREAT | O_EXCL);
 }
 
 __attribute__((destructor)) void on_exit() {
 
-	if (SingleInstance::__sem_instance != NULL) {
+	__builtin_puts("destructor");
+	if (SingleInstance::isFirstRunning()) {
 
-		sem_unlink(APPLICATION_INSTANCE_MUTEX_NAME);
-		sem_close(SingleInstance::__sem_instance);
+		semctl(SingleInstance::semid, 0, IPC_RMID);
 	}
 }
 
@@ -44,8 +51,8 @@ DaemonContainer::~DaemonContainer() {
 
 	if (isParentProcess())
 	{
-		sem_close(SingleInstance::__sem_instance);
-		SingleInstance::__sem_instance = NULL;
+		semctl(SingleInstance::semid, 0, IPC_RMID);
+		SingleInstance::semid = 0;
 	}
 }
 
@@ -64,7 +71,7 @@ bool DaemonContainer::initDaemon() {
 #if defined _DEBUG
 			currentTrace = DAEMON;
 #endif
-			sem_unlink(APPLICATION_INSTANCE_MUTEX_NAME);
+			on_exit();
 			on_start();
 
 			return true;

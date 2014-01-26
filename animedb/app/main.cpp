@@ -23,6 +23,7 @@ int main(int argc, char ** argv){
 
 	if (SingleInstance::isFirstRunning())
 	{
+		__builtin_puts("isFirstRunning");
 		DaemonContainer container;
 		if(!container.isParentProcess() && container.initDaemon())
 		{
