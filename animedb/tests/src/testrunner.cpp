@@ -8,8 +8,6 @@
 
 #include "Debug.hpp"
 
-TraceType currentTrace = PROCESS;
-
 void runSuite(int argc, char const *argv[]){
 
 	typedef cute::runner<cute::xml_listener<cute::ide_listener<> > > xml_runner;

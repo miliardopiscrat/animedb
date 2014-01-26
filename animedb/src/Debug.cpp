@@ -13,6 +13,8 @@
 #include <algorithm>
 #include <iterator>
 
+TraceType currentTrace = PROCESS;
+
 std::string debug(const InfoResult& result) {
 
 	std::stringstream in;
@@ -41,7 +43,7 @@ std::string debug(const InfoResult& result) {
 
 Trace &Trace::GetTrace() {
 
-	static Trace trace;
+	static Trace trace(currentTrace);
 	return trace;
 }
 
@@ -113,8 +115,9 @@ Trace &Trace::operator <<(const std::vector<Element>& input)
 	return *this;
 }
 
-Trace::Trace() {
-	initialize();
+Trace::Trace(TraceType type) {
+
+	initialize(type);
 }
 
 Trace& Trace::operator <<(const std::set<Element>& input) {
@@ -126,8 +129,12 @@ Trace& Trace::operator <<(const std::set<Element>& input) {
 		return *this;
 }
 
-void Trace::initialize() {
-	outFile.open("/tmp/animedb.debug", std::ios::out | std::fstream::app);
+void Trace::initialize(TraceType type) {
+	if(type == PROCESS)
+		outFile.open("/tmp/animedb.debug", std::ios::out | std::fstream::app);
+
+	if(type == DAEMON)
+		outFile.open("/tmp/animedb_daemon.debug", std::ios::out | std::fstream::app);
 }
 
 Trace::~Trace() {

@@ -43,10 +43,10 @@ private:
 
 	std::ofstream outFile;
 
-	Trace();
+	Trace(TraceType type);
 	~Trace();
 
-	void initialize();
+	void initialize(TraceType type);
 };
 
 #define TRACE(message) Trace::GetTrace () << __PRETTY_FUNCTION__ << ":(" << __LINE__ << ") "<< Trace::Endl <<  message << Trace::Endl;
