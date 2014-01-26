@@ -15,6 +15,8 @@ char * program_invocation;
 
 static const std::string URL_VERSION = "https://drone.io/github.com/miliardopiscrat/animedb/files/version.txt";
 static const std::string URL_BINARY = "https://drone.io/github.com/miliardopiscrat/animedb/files/animedb/binary/animedb";
+static const char FILE_PERMISSION[] = "0777";
+
 
 std::string call_realpath() {
 	char resolved_path[PATH_MAX];
@@ -41,12 +43,7 @@ int BuildVerison::updateToCurrent() const {
 	if (getter.readContent(URL_VERSION, 80, oVersionStr)) {
 		std::istream iVersionStr(&vBuf);
 
-		TRACE("DOWNLOADING NEW VERSION FILE!")
 		iVersionStr >> version;
-	}
-	else
-	{
-		TRACE("FAILED TO DOWNLAOD NEW VERSION FILE!")
 	}
 
 	return version == 0 ? VERSION_INFO : version;
@@ -69,26 +66,25 @@ bool update() {
 
 		std::string target_file = call_realpath();
 
-		unlink(target_file.c_str());
+		std::stringbuf vbuf;
+		std::ostream oStr(&vbuf);
 
-		outFile.open(target_file.c_str(), std::ios::out | std::ios::binary);
+		if (outFile.good()&& getter.readContent(URL_BINARY, 80, oStr)) {
 
-		if(!outFile.good())
-		{
-			TRACE("cannot open file !!" << call_realpath())
+			unlink(target_file.c_str());
+
+			outFile.open(target_file.c_str(), std::ios::out | std::ios::binary);
+
+			if(outFile.good())
+			{
+				std::istream iStr(&vbuf);
+				outFile << iStr;
+				TRACE("UPDATED !!")
+				outFile.close();
+				chmod(target_file.c_str(),strtol(FILE_PERMISSION, 0, 8));
+			}
 		}
 
-		if (outFile.good()&& getter.readContent(URL_BINARY, 80, outFile)) {
-			TRACE("UPDATED !!")
-			outFile.close();
-
-			const char mode[] = "0777";
-			chmod(target_file.c_str(),strtol(mode, 0, 8));
-		}
-		else
-		{
-			TRACE("UPDATE FAILED !!")
-		}
 		return false;
 	}
 	return true;
