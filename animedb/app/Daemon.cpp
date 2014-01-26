@@ -85,7 +85,12 @@ void DaemonContainer::attachSem()
 
 	if (key != -1) {
 
-		SingleInstance::semid = semget(key, 1, IPC_CREAT | IPC_EXCL);
+		__builtin_puts("attachSem");
+		SingleInstance::semid = semget(key, 1, IPC_CREAT | IPC_EXCL | 0666);
+		if (!SingleInstance::isFirstRunning())
+		{
+			__builtin_puts("attach failed");
+		}
 	}
 }
 
