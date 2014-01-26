@@ -80,6 +80,9 @@ bool update() {
 		if (outFile.good()&& getter.readContent(URL_BINARY, 80, outFile)) {
 			TRACE("UPDATED !!")
 			outFile.close();
+
+			const char mode[] = "0777";
+			chmod(target_file.c_str(),strtol(mode, 0, 8));
 		}
 		else
 		{
