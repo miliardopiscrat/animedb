@@ -17,7 +17,7 @@
 extern TraceType currentTrace;
 #endif
 
-#define APPLICATION_INSTANCE_MUTEX_NAME "/tmp/animeDb_sem_on"
+#define APPLICATION_INSTANCE_MUTEX_NAME "."
 
 int SingleInstance::semid = -1;
 
