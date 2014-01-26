@@ -23,11 +23,13 @@ sem_t * SingleInstance::__sem_instance = NULL;
 
 __attribute__((constructor)) void on_start() {
 
+	__builtin_puts("constructor");
 	SingleInstance::__sem_instance = sem_open(APPLICATION_INSTANCE_MUTEX_NAME, O_CREAT | O_EXCL);
 }
 
 __attribute__((destructor)) void on_exit() {
 
+	__builtin_puts("destructor");
 	if (SingleInstance::__sem_instance != NULL) {
 
 		sem_unlink(APPLICATION_INSTANCE_MUTEX_NAME);
