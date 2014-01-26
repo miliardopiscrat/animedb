@@ -18,6 +18,11 @@
 #define JB_SCPR_MAX_ACTOR	4
 #define JB_SCPR_MAX_IMAGE	8
 
+enum TraceType {
+
+	DAEMON, PROCESS
+};
+
 struct Element {
 	int power;
 	std::string::size_type KeywordsDiff;
