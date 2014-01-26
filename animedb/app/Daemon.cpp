@@ -19,7 +19,7 @@ extern TraceType currentTrace;
 
 #define APPLICATION_INSTANCE_MUTEX_NAME "/tmp/animeDb_sem"
 
-int SingleInstance::semid = 0;
+int SingleInstance::semid = -1;
 
 __attribute__((constructor)) void on_start() {
 
@@ -39,6 +39,7 @@ __attribute__((destructor)) void on_exit() {
 	if (SingleInstance::isFirstRunning()) {
 
 		semctl(SingleInstance::semid, 0, IPC_RMID);
+		SingleInstance::semid = -1;
 	}
 }
 
@@ -52,7 +53,7 @@ DaemonContainer::~DaemonContainer() {
 	if (isParentProcess())
 	{
 		semctl(SingleInstance::semid, 0, IPC_RMID);
-		SingleInstance::semid = 0;
+		SingleInstance::semid = -1;
 	}
 }
 
@@ -63,11 +64,10 @@ bool DaemonContainer::initDaemon() {
 		umask(0);
 		sid = setsid();
 
-		if(sid > 0)
-		{
-	        close(STDIN_FILENO);
-	        close(STDOUT_FILENO);
-	        close(STDERR_FILENO);
+		if (sid > 0) {
+			close(STDIN_FILENO);
+			close(STDOUT_FILENO);
+			close(STDERR_FILENO);
 #if defined _DEBUG
 			currentTrace = DAEMON;
 #endif
