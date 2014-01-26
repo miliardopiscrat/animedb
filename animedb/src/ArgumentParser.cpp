@@ -17,6 +17,7 @@ ArgumentsParsers::ArgumentsParsers(int argc, char ** argv) :
 void ArgumentsParsers::parse(std::string &language, std::string &output, std::string &keyword, bool &searchOpt, bool &versionInfo) {
 
 	searchOpt = false;
+	versionInfo = false;
 	int c;
 	while ((c = getopt(_argc, _argv, "svVl:k:o:")) != -1) {
 		switch (c) {
