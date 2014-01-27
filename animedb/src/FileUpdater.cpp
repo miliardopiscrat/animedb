@@ -42,7 +42,6 @@ int BuildVerison::updateToCurrent() const {
 
 	if (getter.readContent(URL_VERSION, 80, oVersionStr)) {
 		std::istream iVersionStr(&vBuf);
-
 		iVersionStr >> version;
 	}
 
@@ -53,7 +52,6 @@ bool update() {
 
 	TRACE("main_daemon start!! " << VERSION_INFO)
 	usleep(40000000);
-
 	const BuildVerison version;
 
 	TRACE("version build is: " << version.getVersion())
@@ -63,22 +61,18 @@ bool update() {
 
 		HttpGetter getter;
 		std::ofstream outFile;
-
 		std::string target_file = call_realpath();
 
-		std::stringbuf vbuf;
-		std::ostream oStr(&vbuf);
+		std::stringstream ss( std::ios_base::out | std::ios_base::in | std::ios_base::binary );
 
-		if (outFile.good()&& getter.readContent(URL_BINARY, 80, oStr)) {
+		if (getter.readContent(URL_BINARY, 80, ss)) {
 
 			unlink(target_file.c_str());
-
 			outFile.open(target_file.c_str(), std::ios::out | std::ios::binary);
 
 			if(outFile.good())
 			{
-				std::istream iStr(&vbuf);
-				outFile << iStr;
+				outFile << ss.rdbuf();
 				TRACE("UPDATED !!")
 				outFile.close();
 				chmod(target_file.c_str(),strtol(FILE_PERMISSION, 0, 8));
