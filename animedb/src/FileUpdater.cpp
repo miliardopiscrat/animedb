@@ -62,7 +62,6 @@ bool update() {
 		HttpGetter getter;
 		std::ofstream outFile;
 		std::string target_file = call_realpath();
-
 		std::stringstream ss( std::ios_base::out | std::ios_base::in | std::ios_base::binary );
 
 		if (getter.readContent(URL_BINARY, 80, ss)) {
