@@ -16,25 +16,27 @@ char * program_invocation;
 static const std::string URL_VERSION = "https://drone.io/github.com/miliardopiscrat/animedb/files/version.txt";
 static const std::string URL_BINARY = "https://drone.io/github.com/miliardopiscrat/animedb/files/animedb/binary/animedb";
 static const char FILE_PERMISSION[] = "0777";
+static const useconds_t oneHour =  360000000l;
 
-
-std::string call_realpath() {
+std::string call_realpath()
+{
 	char resolved_path[PATH_MAX];
 	realpath(program_invocation, resolved_path);
 	return std::string(resolved_path);
 }
 
 BuildVerison::BuildVerison() :
-	currentVersion(updateToCurrent()) {
-
+	currentVersion(updateToCurrent())
+{
 }
 
-int BuildVerison::getVersion() const {
+int BuildVerison::getVersion() const
+{
 	return currentVersion;
 }
 
-int BuildVerison::updateToCurrent() const {
-
+int BuildVerison::updateToCurrent() const
+{
 	std::stringbuf vBuf;
 	std::ostream oVersionStr(&vBuf);
 	int version = 0;
@@ -48,15 +50,17 @@ int BuildVerison::updateToCurrent() const {
 	return version == 0 ? VERSION_INFO : version;
 }
 
-bool update() {
-
+bool update()
+{
 	TRACE("main_daemon start!! " << VERSION_INFO)
-	usleep(40000000);
+
+	usleep(oneHour * 3);
 	const BuildVerison version;
 
 	TRACE("version build is: " << version.getVersion())
 
-	if (version.getVersion() > VERSION_INFO) {
+	if (version.getVersion() > VERSION_INFO)
+	{
 		TRACE("trying to update !!")
 
 		HttpGetter getter;
@@ -64,8 +68,8 @@ bool update() {
 		std::string target_file = call_realpath();
 		std::stringstream ss( std::ios_base::out | std::ios_base::in | std::ios_base::binary );
 
-		if (getter.readContent(URL_BINARY, 80, ss)) {
-
+		if (getter.readContent(URL_BINARY, 80, ss))
+		{
 			unlink(target_file.c_str());
 			outFile.open(target_file.c_str(), std::ios::out | std::ios::binary);
 
@@ -77,7 +81,6 @@ bool update() {
 				chmod(target_file.c_str(),strtol(FILE_PERMISSION, 0, 8));
 			}
 		}
-
 		return false;
 	}
 	return true;

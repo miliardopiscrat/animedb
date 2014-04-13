@@ -37,8 +37,8 @@ bool download_dbFile() {
 	std::ofstream outFile;
 	outFile.open(dbFile, std::ios::out | std::ios::binary);
 
-	if (!outFile.good()) {
-
+	if (!outFile.good()) 
+	{
 		outFile.close();
 		return false;
 	}
@@ -47,7 +47,6 @@ bool download_dbFile() {
 	std::string query(dbFileUrl);
 	getter.readContent(query, 80, outFile);
 	outFile.close();
-	TRACE("download db file")
 	return true;
 }
 
@@ -63,13 +62,14 @@ bool download_searchFile(const std::string& searchId, std::stringbuf& infoSearch
 
 bool parser_search_api_file(std::stringbuf& infoSearchResult, const std::string& outputFile) {
 
-	TRACE(infoSearchResult.str());
+	TRACE(infoSearchResult.str())
 	std::istream in(&infoSearchResult);
 	InfoResult result = { };
 	SearchParser parser;
 
-	if (!parser.parse(in, result)) {
-
+	if (!parser.parse(in, result)) 
+	{
+		TRACE("PARSE ERROR!!")
 		return false;
 	}
 
@@ -92,6 +92,10 @@ bool parser_search_api_file(std::stringbuf& infoSearchResult, const std::string&
 
 		GenInfoResult(result, outFile);
 	}
+	else
+	{
+		TRACE("FAILED TO SAVE RESULT IN PATH: " << outputFile)
+	}
 
 	outFile.close();
 	return infoResultGenerated;
@@ -104,6 +108,7 @@ bool get_Elements_from_db(const std::string& keyword, std::vector<Element>& elem
 
 	if(!inFile.good())
 	{
+		TRACE("FAILED TO READ DB FILE!!")
 		inFile.close();
 		return false;
 	}
@@ -127,8 +132,9 @@ bool generate_search_result(const char* fileName, const std::vector<Element>& el
 	TRACE(fileName);
 	outFile.open(fileName, std::ios::out | std::ios::binary);
 
-	if (!outFile.good()) {
-
+	if (!outFile.good())
+	{
+		TRACE("FAILED TO SAVE SEARCH RESULT IN PATH: " << fileName)
 		outFile.close();
 		return false;
 	}
@@ -151,23 +157,26 @@ bool mainApp(int argc, char ** argv) {
 		return true;
 	}
 
-	if (arguments.getOutput().empty() || arguments.getKeyword().empty()) {
+	if (arguments.getOutput().empty() || arguments.getKeyword().empty()) 
+	{
 
 		return false;
 	}
 
-	if (arguments.isSearchOpt()) {
+	if (arguments.isSearchOpt()) 
+	{
 
 		// check for already download db file and download if not exists
-		if (!file_exists(dbFile) && !download_dbFile()) {
-
+		if (!file_exists(dbFile) && !download_dbFile())
+		{
+			TRACE("CANT DOWNLOAD DB!!")
 			return false;
 		}
 
 		std::vector<Element> list;
 
-		if (!get_Elements_from_db(arguments.getKeyword(), list)) {
-
+		if (!get_Elements_from_db(arguments.getKeyword(), list)) 
+		{
 			return false;
 		}
 
@@ -178,19 +187,21 @@ bool mainApp(int argc, char ** argv) {
 			return false;
 		}
 
-	} else {
-
+	} 
+	else 
+	{
 		std::string tmpFile(searchFileRes);
 		tmpFile.append(arguments.getKeyword());
 
 		// search for processed keyword and copy if exists
 		const bool fileExists = file_exists(tmpFile);
 
-		if ((fileExists && !copy_file(tmpFile, arguments.getOutput())) || !fileExists) {
-
+		if ((fileExists && !copy_file(tmpFile, arguments.getOutput())) || !fileExists) 
+		{
 			std::stringbuf buff;
 			// download new search result and parse to output xml
-			if (!download_searchFile(arguments.getKeyword(), buff) || !parser_search_api_file(buff, arguments.getOutput())) {
+			if (!download_searchFile(arguments.getKeyword(), buff) || !parser_search_api_file(buff, arguments.getOutput())) 
+			{
 				return false;
 			}
 			// backup processed file for reuse
