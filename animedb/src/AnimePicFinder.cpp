@@ -11,7 +11,7 @@
 #include "Debug.hpp"
 
 const std::string query_url = "http://anime-pictures.net/pictures/view_posts/0?lang=en&type=xml&search_tag=";
-
+const std::string http_prefix = "HTTP:";
 
 AnimePicFinder::AnimePicFinder() {
 
@@ -65,8 +65,8 @@ bool AnimePicFinder::parseArtLinks(const TiXmlHandle& xmlHandle, std::vector<Fan
 						art_url.erase(std::remove(art_url.begin(), art_url.end(), '\t'), art_url.end());
 						art_url.erase(std::remove(art_url.begin(), art_url.end(), '\r'), art_url.end());
 
-						fanart.setFanartPreview(preview_url);
-						fanart.setFanart(art_url);
+						fanart.setFanartPreview(http_prefix + preview_url);
+						fanart.setFanart(http_prefix + art_url);
 						arts.push_back(fanart);
 
 						TRACE(fanart);
