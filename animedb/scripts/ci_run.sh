@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-
+set -e
 
 export PATH=`pwd`/../compiler/msdk-4.3.6-mips-EL-2.6.34-0.9.30.3_hwfpu/bin:$PATH
 
@@ -15,3 +15,4 @@ make TARGET=linux testlib -j4
 make TARGET=linux clean
 make TARGET=mipsel all -j4
 make TARGET=mipsel tarball
+

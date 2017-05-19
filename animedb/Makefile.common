@@ -1,7 +1,7 @@
 
 CXXFLAGS += -c -g -Wall -Os -DTIXML_USE_STL -DSYS_UNIX=1
 CXXINCLUDES += -I./include/curl -I./include/tinyxml -I./include/external
-LDLIBS += -ltinyxml -lcurl -lz
+LDLIBS += -ltinyxml -lcurl -lz -lpthread -lssl -lcrypto -ldl
 
 CPP_FILES += $(wildcard src/*.cpp) $(wildcard app/*.cpp)
 OBJ_FILES := $(addprefix obj/$(TARGET)/,$(notdir $(CPP_FILES:.cpp=.o)))

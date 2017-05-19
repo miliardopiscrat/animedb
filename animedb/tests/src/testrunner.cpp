@@ -3,7 +3,10 @@
 #include "xml_listener.h"
 #include "cute_runner.h"
 
-#include "AnimeDbFinderSuite.h"
+#include "AnimeDbFinderSuite.hpp"
+#include "ProcessVersion.hpp"
+
+#include "Debug.hpp"
 
 void runSuite(int argc, char const *argv[]){
 
@@ -14,6 +17,7 @@ void runSuite(int argc, char const *argv[]){
 	xml_runner runner = cute::makeRunner(lis,argc,argv);
 
 	runner(make_suite_AnimeDbFinderSuite(), "AnimeDbFinderSuite");
+	runner(make_suite_ProcessVersionSuite(), "ProcessVersionSuite");
 }
 
 int main(int argc, char const *argv[]){

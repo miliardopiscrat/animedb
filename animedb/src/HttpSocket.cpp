@@ -56,6 +56,8 @@ bool HttpGetter::readPostContent(const std::string& url, const std::string postP
 
 bool HttpGetter::readDocumentSetup(const std::string& url, unsigned int port,  CURL* const curl, std::ostream& ostream) const {
 
+	 const bool isSSLconnection = url.substr(0, 5) == "https";
+
 		return CURLE_OK == curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &data_write)
 		&& CURLE_OK == curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1L)
 		&& CURLE_OK == curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L)
@@ -63,7 +65,9 @@ bool HttpGetter::readDocumentSetup(const std::string& url, unsigned int port,  C
 		&& CURLE_OK == curl_easy_setopt(curl, CURLOPT_TIMEOUT, _timeout)
 		//&& CURLE_OK == curl_easy_setopt(curl, CURLOPT_PORT, port)
 		&& CURLE_OK == curl_easy_setopt(curl, CURLOPT_URL, url.c_str())
-		&& CURLE_OK == curl_easy_setopt(curl, CURLOPT_ENCODING, "");
+		&& CURLE_OK == curl_easy_setopt(curl, CURLOPT_ENCODING, "")
+		&& (!isSSLconnection || (CURLE_OK == curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L)
+		&& CURLE_OK == curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L)));
 }
 
 size_t HttpGetter::data_write(void* buf, size_t size, size_t nmemb, void* userp) {

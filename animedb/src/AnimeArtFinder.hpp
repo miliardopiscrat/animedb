@@ -48,7 +48,7 @@ public:
 
 	bool getAnimeArts(std::vector<Fanart>& arts, const std::string& title) {
 
-		return artFinderFisrt.getAnimeArts(arts, title) || artFinderSecond.getAnimeArts(arts, title);
+		return arts.size() >= JB_SCPR_MAX_IMAGE || (artFinderFisrt.getAnimeArts(arts, title) | artFinderSecond.getAnimeArts(arts, title));
 	}
 
 private:

@@ -19,8 +19,8 @@ public:
 	bool getAnimeArts(std::vector<Fanart>& arts, const std::string& title);
 
 private:
-	bool getArtLinks(std::istream& in, std::vector<Fanart>& arts);
-	bool parseContent(const std::string animeLink, std::istream& in, std::vector<Fanart>& arts);
+	bool getArtLinks(const std::string keyword, std::istream& in, std::vector<Fanart>& arts);
+	bool parseContent(std::istream& in, std::vector<Fanart>& arts);
 
 	HttpGetter httpSocket;
 	std::stringbuf buff;
