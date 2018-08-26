@@ -27,7 +27,7 @@ jobs:
      #     - v1-dependencies-
 
       - run: 
-            cd ~/animedb && make TARGET=linux testlib -j4
+            cd ~/animedb/scripts && sh ci_run.sh
 
     #  - save_cache:
     #      paths:
