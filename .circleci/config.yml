@@ -27,7 +27,7 @@ jobs:
      #     - v1-dependencies-
 
       - run: 
-            cd ~/animedb/animedb/scripts && sh toolchain.sh
+            cd ~/animedb/animedb/scripts && sh toolchain.sh && ci_run.sh
 
     #  - save_cache:
     #      paths:
