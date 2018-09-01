@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 cd ..
-
+rm -rf compiler
 
 if [ ! -d "compiler" ]; then
 mkdir compiler
