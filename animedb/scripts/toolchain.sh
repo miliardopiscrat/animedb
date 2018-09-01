@@ -13,5 +13,5 @@ curl -Lb /tmp/gcokie "${ggURL}&confirm=${getcode}&id=${ggID}" -o "${filename}"
 #printf '4/TQCT57PHjwlWuYP9bRIeCk75SVHrrMpWPDK0T2m43XPOYpwPh2TthBA' | ./gdrive download 1fL4TMGhfmXRQ3cOEGa3H3afExt6pMrzR
 tar -xvzf compiler.tar.gz
 rm -rf compiler.tar.gz
-tar -xvzf ./scripts/compiler.tar.gz
+tar -xvzf ./scripts/make.tar.gz
 fi
