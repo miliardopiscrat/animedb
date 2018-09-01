@@ -1,12 +1,10 @@
 #!/bin/bash
 
-set -e
-
 export PATH=`pwd`/../compiler/msdk-4.3.6-mips-EL-2.6.34-0.9.30.3_hwfpu/bin:$PATH
 
 ls $(pwd)/../compiler
 
-cd animedb
+#cd animedb
 
 make TARGET=linux testlib -j4
 
