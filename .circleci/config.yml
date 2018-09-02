@@ -4,32 +4,66 @@
 #
 version: 2
 jobs:
-  build:
-    docker:
-      # specify the version you desire here
-      - image: circleci/build-image:ubuntu-14.04-XXL-1327-3401d20
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
-    working_directory: ~/animedb
-
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
+  toolchain:
+      docker:
+        - image: circleci/build-image:ubuntu-14.04-XXL-1327-3401d20
+      working_directory: ~/animedb/animedb/scripts
+      steps:
+        - checkout
+        - restore_cache:
+            keys:
+              - toolchain
+        - run:
+            name: toolchain download
+            command: sh toolchain.sh
+        - save_cache:
+            key: toolchain
+            paths:
+              - ./compiler
+        - run: cd ~/animedb/animedb/scripts && sh ci_run.sh
+        # run tests!
+        - run: ./binary/test
+   build:
+     docker:
+        - image: circleci/build-image:ubuntu-14.04-XXL-1327-3401d20
+      working_directory: ~/animedb/animedb/scripts
+      steps:
+        - checkout
+        - restore_cache:
+            keys:
+              - toolchain
+        - run:
+            name: run build
+            command: sh ci_run.sh
+        - save_cache:
+            key: binary
+            paths:
+              - ./../compiler
+   test:
+     docker:
+        - image: circleci/build-image:ubuntu-14.04-XXL-1327-3401d20
+      working_directory: ~/animedb/animedb/binary
+      steps:
+        - restore_cache:
+            keys:
+              - binary
+        - run: 
+            name: run tests
+            command: ./test
+        
+ workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - toolchain
+      - build
+         requires:
             - toolchain
-      - run: 
-            cd ~/animedb/animedb/scripts && sh toolchain.sh
-      - save_cache:
-          key: toolchain
-          paths:
-            - ./compiler
-            - ./make
-      - run: cd ~/animedb/animedb/scripts && sh ci_run.sh
-      # run tests!
-      - run: ./binary/test
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
 
 
