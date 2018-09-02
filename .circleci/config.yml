@@ -34,6 +34,7 @@ jobs:
         - run:
             name: run build
             command: |
+              echo "#define VERSION_INFO $CIRCLE_BUILD_NUM" > /root/animedb/animedb/scr/Version.info
               cd /root/animedb/animedb
               make TARGET=linux testlib -j4
         - save_cache:
@@ -74,6 +75,7 @@ jobs:
             command: |
               cd /root/animedb/animedb
               export PATH=/root/animedb/animedb/compiler/msdk-4.3.6-mips-EL-2.6.34-0.9.30.3_hwfpu/bin:$PATH
+              echo "#define VERSION_INFO $CIRCLE_BUILD_NUM" > /root/animedb/animedb/scr/Version.info
               make TARGET=mipsel all -j4
               make TARGET=mipsel tarball
         - store_artifacts:
