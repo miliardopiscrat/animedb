@@ -6,7 +6,7 @@ version: 2
 jobs:
   toolchain:
       docker:
-        - image: circleci/build-image:ubuntu-14.04-XXL-1327-3401d20
+        - image: circleci/build-image:ubuntu-14.04-enterprise-945-8fcbc5a
       working_directory: ~/animedb/animedb/scripts
       steps:
         - checkout
@@ -23,7 +23,7 @@ jobs:
         - run: cd ~/animedb/animedb/scripts && sh ci_run.sh
       build:
         docker:
-          - image: circleci/build-image:ubuntu-14.04-XXL-1327-3401d20
+          - image: circleci/build-image:ubuntu-14.04-enterprise-945-8fcbc5a
         working_directory: ~/animedb/animedb/scripts
         steps:
           - checkout
@@ -39,7 +39,7 @@ jobs:
                 - ./../compiler
       test:
         docker:
-          - image: circleci/build-image:ubuntu-14.04-XXL-1327-3401d20
+          - image: circleci/build-image:ubuntu-14.04-enterprise-945-8fcbc5a
         working_directory: ~/animedb/animedb/binary
         steps:
           - restore_cache:
