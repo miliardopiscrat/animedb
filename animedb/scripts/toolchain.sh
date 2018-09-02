@@ -1,6 +1,5 @@
 #!/bin/bash
 cd ..
-rm -rf compiler
 
 if [ ! -d "compiler" ]; then
 ggID='1fL4TMGhfmXRQ3cOEGa3H3afExt6pMrzR'  
