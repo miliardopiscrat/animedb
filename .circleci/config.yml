@@ -51,8 +51,8 @@ jobs:
           - run: 
               name: run tests
               command: |
-              cd ./animedb/scripts
-              ./test
+                cd ./animedb/scripts
+                ./test
 
 workflows:
   version: 2
