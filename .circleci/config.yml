@@ -28,7 +28,7 @@ jobs:
           paths:
             - ./compiler
             - ./make
-      - run cd ~/animedb/animedb/scripts && sh ci_run.sh
+      - run: cd ~/animedb/animedb/scripts && sh ci_run.sh
       # run tests!
       - run: ./binary/test
 
