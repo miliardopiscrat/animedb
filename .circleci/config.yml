@@ -56,7 +56,7 @@ jobs:
               ./test
     build:
       docker:
-        - image: circleci/build-image:ubuntu-14.04-enterprise-945-8fcbc5a
+        - image: circleci/build-image:ubuntu-14.04-XXL-1327-3401d20
       working_directory: /root/animedb
       steps:
         - checkout
