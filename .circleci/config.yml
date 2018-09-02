@@ -74,16 +74,13 @@ jobs:
             name: run build
             command: |
               cd /root/animedb/animedb
-              ls /root/animedb/animedb/compiler
-              ls /root/animedb/animedb/compiler/msdk-4.3.6-mips-EL-2.6.34-0.9.30.3_hwfpu/bin
               export PATH=/root/animedb/animedb/compiler/msdk-4.3.6-mips-EL-2.6.34-0.9.30.3_hwfpu/bin:$PATH
               ./make TARGET=mipsel all -j4
               ./make TARGET=mipsel tarball
               ls /root/animedb/animedb/binary
-        - save_cache:
-            key: binary-{{ .Revision }}
-            paths:
-              - /root/animedb/animedb/binary
+        - store_artifacts:
+            path: /root/animedb/animedb/binary
+            destination: animedb-binary
 workflows:
   version: 2
   build_and_test:
