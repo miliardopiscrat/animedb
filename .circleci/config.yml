@@ -15,12 +15,13 @@ jobs:
               - toolchain
         - run:
             name: toolchain download
-            command: sh toolchain.sh
+            command: |
+              pwd
+              sh toolchain.sh
         - save_cache:
             key: toolchain
             paths:
               - ./compiler
-        - run: cd ~/animedb/animedb/scripts && sh ci_run.sh
       build:
         docker:
           - image: circleci/build-image:ubuntu-14.04-enterprise-945-8fcbc5a
