@@ -12,14 +12,14 @@ jobs:
           - checkout
           - restore_cache:
               keys:
-                - toolchain-{{ .Revision }}
+                - toolchain-binary
           - run:
               name: toolchain download
               command: |
                 cd /root/animedb/animedb/scripts
                 sh toolchain.sh
           - save_cache:
-              key: toolchain-{{ .Revision }}
+              key: toolchain-binary
               paths:
                 - /root/animedb/animedb/compiler
     build-test:
