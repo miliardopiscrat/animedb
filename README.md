@@ -32,3 +32,7 @@ search for phrase gundam in db:
 download description for movie with id 8566
 
 ./animedb -k 8566 -o /tmp/movie.descr.xml
+
+=====
+
+CI builds can be found here: https://circleci.com/gh/miliardopiscrat/animedb
