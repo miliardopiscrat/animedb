@@ -17,6 +17,7 @@ jobs:
             name: toolchain download
             command: |
               pwd
+              ls
               sh toolchain.sh
         - save_cache:
             key: toolchain
