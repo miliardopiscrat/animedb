@@ -6,7 +6,7 @@ version: 2
 jobs:
     toolchain:
         docker:
-          - image: circleci/build-image:ubuntu-14.04-enterprise-945-8fcbc5a
+          - image: fedora:latest
         working_directory: /root/animedb
         steps:
           - checkout
@@ -43,7 +43,7 @@ jobs:
               - /root/animedb/animedb/binary
     test:
       docker:
-        - image: circleci/build-image:ubuntu-14.04-enterprise-945-8fcbc5a
+        - image: fedora:latest
       working_directory: /root/animedb
       steps:
         - restore_cache:
