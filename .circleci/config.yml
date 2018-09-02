@@ -54,7 +54,7 @@ workflows:
   build_and_test:
     jobs:
       - toolchain
-      - build
+      - build:
           requires:
             - toolchain
       - test:
