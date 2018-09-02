@@ -36,7 +36,7 @@ jobs:
             name: run build
             command: |
               cd /root/animedb/animedb/scripts
-              sh ci_run.sh
+              make TARGET=linux testlib -j4
         - save_cache:
             key: binary-test-{{ .Revision }}
             paths:
@@ -75,8 +75,8 @@ jobs:
             command: |
               cd /root/animedb/animedb
               export PATH=/root/animedb/animedb/compiler/msdk-4.3.6-mips-EL-2.6.34-0.9.30.3_hwfpu/bin:$PATH
-              ./make TARGET=mipsel all -j4
-              ./make TARGET=mipsel tarball
+              make TARGET=mipsel all -j4
+              make TARGET=mipsel tarball
         - store_artifacts:
             path: /root/animedb/animedb/binary
             destination: animedb-{{ .BuildNum }}-binary
