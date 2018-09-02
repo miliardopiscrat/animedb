@@ -55,7 +55,7 @@ workflows:
     jobs:
       - toolchain
       - build
-         requires:
+          requires:
             - toolchain
       - test:
           requires:
