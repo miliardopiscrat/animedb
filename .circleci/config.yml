@@ -39,7 +39,7 @@ jobs:
           - save_cache:
               key: binary
               paths:
-                - ./animedb/compiler
+                - ./animedb/binary
       test:
         docker:
           - image: circleci/build-image:ubuntu-14.04-enterprise-945-8fcbc5a
@@ -51,7 +51,7 @@ jobs:
           - run: 
               name: run tests
               command: |
-                cd ./animedb/scripts
+                cd ./animedb/binary
                 ./test
 
 workflows:
