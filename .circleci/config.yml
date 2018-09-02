@@ -16,12 +16,13 @@ jobs:
           - run:
               name: toolchain download
               command: |
-                cd ./animedb/scripts
+                cd /root/animedb/animedb/scripts
                 sh toolchain.sh
           - save_cache:
               key: toolchain
               paths:
-                - ./animedb/compiler
+                - /root/animedb/animedb/compiler
+                - /root/animedb/animedb/make
     build:
       docker:
         - image: circleci/build-image:ubuntu-14.04-enterprise-945-8fcbc5a
@@ -34,12 +35,12 @@ jobs:
         - run:
             name: run build
             command: |
-              cd ./animedb/scripts
+              cd /root/animedb/animedb/scripts
               sh ci_run.sh
         - save_cache:
             key: binary
             paths:
-              - ./animedb/binary
+              - /root/animedb/animedb/binary
     test:
       docker:
         - image: circleci/build-image:ubuntu-14.04-enterprise-945-8fcbc5a
@@ -51,7 +52,7 @@ jobs:
         - run: 
             name: run tests
             command: |
-              cd ./animedb/binary
+              cd /root/animedb/animedb/binary
               ./test
 workflows:
   version: 2
