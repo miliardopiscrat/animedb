@@ -23,35 +23,35 @@ jobs:
         - run: cd ~/animedb/animedb/scripts && sh ci_run.sh
         # run tests!
         - run: ./binary/test
-   build:
-     docker:
-        - image: circleci/build-image:ubuntu-14.04-XXL-1327-3401d20
-      working_directory: ~/animedb/animedb/scripts
-      steps:
-        - checkout
-        - restore_cache:
-            keys:
-              - toolchain
-        - run:
-            name: run build
-            command: sh ci_run.sh
-        - save_cache:
-            key: binary
-            paths:
-              - ./../compiler
-   test:
-     docker:
-        - image: circleci/build-image:ubuntu-14.04-XXL-1327-3401d20
-      working_directory: ~/animedb/animedb/binary
-      steps:
-        - restore_cache:
-            keys:
-              - binary
-        - run: 
-            name: run tests
-            command: ./test
-        
- workflows:
+      build:
+        docker:
+          - image: circleci/build-image:ubuntu-14.04-XXL-1327-3401d20
+        working_directory: ~/animedb/animedb/scripts
+        steps:
+          - checkout
+          - restore_cache:
+              keys:
+                - toolchain
+          - run:
+              name: run build
+              command: sh ci_run.sh
+          - save_cache:
+              key: binary
+              paths:
+                - ./../compiler
+      test:
+        docker:
+          - image: circleci/build-image:ubuntu-14.04-XXL-1327-3401d20
+        working_directory: ~/animedb/animedb/binary
+        steps:
+          - restore_cache:
+              keys:
+                - binary
+          - run: 
+              name: run tests
+              command: ./test
+
+workflows:
   version: 2
   build_and_test:
     jobs:
@@ -65,5 +65,3 @@ jobs:
           filters:
             branches:
               only: master
-
-
