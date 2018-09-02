@@ -30,7 +30,7 @@ jobs:
         - checkout
         - restore_cache:
             keys:
-              - toolchain-{{ .Revision }}
+              - toolchain-binary
         - run:
             name: run build
             command: |
@@ -68,7 +68,7 @@ jobs:
         - checkout
         - restore_cache:
             keys:
-              - toolchain-{{ .Revision }}
+              - toolchain-binary
         - run:
             name: run build
             command: |
