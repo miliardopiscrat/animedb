@@ -12,14 +12,14 @@ jobs:
           - checkout
           - restore_cache:
               keys:
-                - toolchain
+                - toolchain-{{ .Revision }}
           - run:
               name: toolchain download
               command: |
                 cd /root/animedb/animedb/scripts
                 sh toolchain.sh
           - save_cache:
-              key: toolchain
+              key: toolchain-{{ .Revision }}
               paths:
                 - /root/animedb/animedb/compiler
                 - /root/animedb/animedb/make
@@ -31,14 +31,14 @@ jobs:
         - checkout
         - restore_cache:
             keys:
-              - toolchain
+              - toolchain-{{ .Revision }}
         - run:
             name: run build
             command: |
               cd /root/animedb/animedb/scripts
               sh ci_run.sh
         - save_cache:
-            key: binary
+            key: binary-{{ .Revision }}
             paths:
               - /root/animedb/animedb/binary
     test:
@@ -48,7 +48,7 @@ jobs:
       steps:
         - restore_cache:
             keys:
-              - binary
+              - binary-{{ .Revision }}
         - run: 
             name: run tests
             command: |
