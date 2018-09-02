@@ -54,8 +54,13 @@ jobs:
             command: |
               cd /root/animedb/animedb/binary
               ./test
+              mkdir test-results && mkdir test-results/cute-cpp
+              mv test.xml ./test-results/cute-cpp/
         - store_test_results:
-            path: /root/animedb/animedb/binary/test.xml
+            path: /root/animedb/animedb/binary/test-results
+        - store_artifacts:
+            path: /root/animedb/animedb/binary/test-results
+            destination: animedb-test-results
     build:
       docker:
         - image: circleci/build-image:ubuntu-14.04-XXL-1327-3401d20
