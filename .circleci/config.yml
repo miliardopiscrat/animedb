@@ -77,10 +77,12 @@ jobs:
               export PATH=/root/animedb/animedb/compiler/msdk-4.3.6-mips-EL-2.6.34-0.9.30.3_hwfpu/bin:$PATH
               ./make TARGET=mipsel all -j4
               ./make TARGET=mipsel tarball
-              ls /root/animedb/animedb/binary
         - store_artifacts:
             path: /root/animedb/animedb/binary
-            destination: animedb-binary
+            destination: animedb-{{ .BuildNum }}-binary
+        - store_artifacts:
+            path: /root/animedb/animedb/animedb.tar.gz
+            destination: animedb-{{ .BuildNum }}-tar-gz
 workflows:
   version: 2
   build_and_test:
