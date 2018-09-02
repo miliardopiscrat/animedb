@@ -21,8 +21,6 @@ jobs:
             paths:
               - ./compiler
         - run: cd ~/animedb/animedb/scripts && sh ci_run.sh
-        # run tests!
-        - run: ./binary/test
       build:
         docker:
           - image: circleci/build-image:ubuntu-14.04-XXL-1327-3401d20
