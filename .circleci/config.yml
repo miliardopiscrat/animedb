@@ -7,7 +7,7 @@ jobs:
   toolchain:
       docker:
         - image: circleci/build-image:ubuntu-14.04-enterprise-945-8fcbc5a
-      working_directory: /root/animedb/animedb/scripts
+      working_directory: /root/animedb
       steps:
         - checkout
         - restore_cache:
