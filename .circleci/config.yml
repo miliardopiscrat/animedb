@@ -18,22 +18,17 @@ jobs:
 
     steps:
       - checkout
-
-      # Download and cache dependencies
-     # - restore_cache:
-     #     keys:
-     #     - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-     #     - v1-dependencies-
-
+      - restore_cache:
+          keys:
+            - toolchain
       - run: 
-            cd ~/animedb/animedb/scripts && sh toolchain.sh && sh ci_run.sh
-
-    #  - save_cache:
-    #      paths:
-    #        - node_modules
-    #      key: v1-dependencies-{{ checksum "package.json" }}
-        
+            cd ~/animedb/animedb/scripts && sh toolchain.sh
+      - save_cache:
+          key: toolchain
+          paths:
+            - ./compiler
+            - ./make
+      - run sh ci_run.sh
       # run tests!
       - run: ./binary/test
 
