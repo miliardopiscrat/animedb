@@ -66,6 +66,7 @@ jobs:
         - run:
             name: run build
             command: |
+              cd /root/animedb/animedb
               ./make TARGET=mipsel all -j4
               ./make TARGET=mipsel tarball
               ls /root/animedb/animedb/binary
