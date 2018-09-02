@@ -54,6 +54,7 @@ jobs:
             command: |
               cd /root/animedb/animedb/binary
               ./test
+              ls /root/animedb/animedb/binary
     build:
       docker:
         - image: circleci/build-image:ubuntu-14.04-XXL-1327-3401d20
@@ -67,6 +68,7 @@ jobs:
             name: run build
             command: |
               cd /root/animedb/animedb
+              export PATH=/root/animedb/animedb/compiler/msdk-4.3.6-mips-EL-2.6.34-0.9.30.3_hwfpu/bin:$PATH
               ./make TARGET=mipsel all -j4
               ./make TARGET=mipsel tarball
               ls /root/animedb/animedb/binary
