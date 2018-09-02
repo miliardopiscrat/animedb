@@ -22,7 +22,6 @@ jobs:
               key: toolchain-{{ .Revision }}
               paths:
                 - /root/animedb/animedb/compiler
-                - /root/animedb/animedb/make
     build-test:
       docker:
         - image: circleci/build-image:ubuntu-14.04-enterprise-945-8fcbc5a
@@ -35,7 +34,7 @@ jobs:
         - run:
             name: run build
             command: |
-              cd /root/animedb/animedb/scripts
+              cd /root/animedb/animedb
               make TARGET=linux testlib -j4
         - save_cache:
             key: binary-test-{{ .Revision }}
